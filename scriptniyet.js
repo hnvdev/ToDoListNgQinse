@@ -5,6 +5,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('task-list');
     const emptyImage = document.querySelector('.empty-image');
     const todosContainer = document.querySelector('.todos-container');
+    
+ const saveTasks = () => {
+        const tasks = [];
+        taskList.querySelectorAll('li').forEach(li => {
+            tasks.push({
+                text: li.querySelector('span').textContent,
+                completed: li.querySelector('.checkbox').checked
+            });
+        });
+        localStorage.setItem('todoTasks', JSON.stringify(tasks));
+    };
+
+    const loadTasks = () => {
+        const savedTasks = localStorage.getItem('todoTasks');
+        if (savedTasks) {
+            const tasks = JSON.parse(savedTasks);
+            tasks.forEach(task => {
+                addTask(task.text, task.completed);
+            });
+        }
+        toggleEmptyState();
+    };
 
     const toggleEmptyState = () => {
         emptyImage.style.display = taskList.children.length === 0 ? 'block' : 'none';
